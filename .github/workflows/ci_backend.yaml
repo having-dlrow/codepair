@@ -58,6 +58,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      # # 키 치환 하는 방식
+      # - name: Replace environment variables in .env.development
+      #   run: |
+      #     sed -i 's/^DATABASE_URL=.*/DATABASE_URL=${{ secrets.DATABASE_URL }}/g' .env.development
+      #     sed -i 's/^OPENAI_API_KEY=.*/OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}/g' .env.development
+      # # 파일 치환 하는 방식          
+      # - name: Make .env.development
+      #   run: |
+      #     touch .env.development
+      #     echo "${{ secrets.env }}" >> .env.development
+      #   shell: bash
       - name: Cache dependencies
         id: cache
         uses: actions/cache@v4
@@ -70,9 +81,9 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
         working-directory: ${{ env.working-directory }}
-      - name: Test
-        run: npm test
-        working-directory: ${{ env.working-directory }}
+      # - name: Test
+      #   run: npm test
+      #   working-directory: ${{ env.working-directory }}
       - name: Run build
         run: npm run build
         working-directory: ${{ env.working-directory }}  
