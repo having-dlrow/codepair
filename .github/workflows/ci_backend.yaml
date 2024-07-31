@@ -60,7 +60,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Stack
-        run: docker-compose -f ./docker/docker-compose.yml up mongo --build -d
+        run: docker-compose -f ./docker/docker-compose.yml up --build -d mongo
         working-directory: ${{ env.working-directory }}
 
       # 키 치환 하는 방식
