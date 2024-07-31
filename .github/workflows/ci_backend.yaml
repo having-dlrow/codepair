@@ -52,6 +52,7 @@ jobs:
         node-version: [18.x]
     env:
       working-directory: ./backend
+      mongodb-url: ${{ secrets.DATABASE_URL || 'localhost:27017' }}
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
@@ -60,13 +61,15 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Stack
-        run: docker-compose -f ./docker/docker-compose.yml up --build -d mongo
+        run: |
+          docker-compose -f ./docker/docker-compose.yml up --build -d mongo
+          docker ps -a
         working-directory: ${{ env.working-directory }}
 
       # 키 치환 하는 방식
       - name: Replace environment variables in .env.development
         run: |
-          sed -i 's/^OPENAI_API_KEY=.*/OPENAI_API_KEY=localhost:27017/g' .env.development
+          sed -i 's/^DATABASE_URL=.*/DATABASE_URL=${{ env.mongodb-url }}/g' .env.development
 
       - name: Cache dependencies
         id: cache
