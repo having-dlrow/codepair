@@ -70,6 +70,7 @@ jobs:
       - name: Replace environment variables in .env.development
         run: |
           sed -i 's/^DATABASE_URL=.*/DATABASE_URL=${{ env.mongodb-url }}/g' .env.development
+        working-directory: ${{ env.working-directory }}  
 
       - name: Cache dependencies
         id: cache
